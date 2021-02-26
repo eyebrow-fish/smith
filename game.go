@@ -6,9 +6,9 @@ import (
 	"github.com/hajimehoshi/ebiten/ebitenutil"
 )
 
-type Game struct{
+type Game struct {
 	InputState
-	player Player
+	Player Player
 }
 
 func (g *Game) Update(screen *ebiten.Image) error {
@@ -16,24 +16,29 @@ func (g *Game) Update(screen *ebiten.Image) error {
 	if g.hasReleased(ebiten.KeyF1) {
 		g.debugMode = !g.debugMode
 	}
+
+	if g.rawIndex(ebiten.KeyW) > -1 {
+		g.Player.position.y -= g.Player.speed
+	}
+	if g.rawIndex(ebiten.KeyS) > -1 {
+		g.Player.position.y += g.Player.speed
+	}
+	if g.rawIndex(ebiten.KeyA) > -1 {
+		g.Player.position.x -= g.Player.speed
+	}
+	if g.rawIndex(ebiten.KeyD) > -1 {
+		g.Player.position.x += g.Player.speed
+	}
+	g.Player.animation.tick()
+	if err := g.Player.draw(screen); err != nil {
+		return err
+	}
 	if g.debugMode {
-		debugText := fmt.Sprintf("debug\n%v\n%v", &g.InputState, &g.player)
+		debugText := fmt.Sprintf("debug\n%v\n%v", &g.InputState, &g.Player)
 		err := ebitenutil.DebugPrint(screen, debugText)
 		if err != nil {
 			return err
 		}
-	}
-	if g.rawIndex(ebiten.KeyW) > -1 {
-		g.player.position.y += 0.1
-	}
-	if g.rawIndex(ebiten.KeyS) > -1 {
-		g.player.position.y -= 0.1
-	}
-	if g.rawIndex(ebiten.KeyA) > -1 {
-		g.player.position.x -= 0.1
-	}
-	if g.rawIndex(ebiten.KeyD) > -1 {
-		g.player.position.x += 0.1
 	}
 	return nil
 }
