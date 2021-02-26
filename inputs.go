@@ -29,16 +29,28 @@ func (i *InputState) hasReleased(key ebiten.Key) bool {
 	return false
 }
 
-func (i *InputState) handleInputs() {
+func (i *InputState) collectInputs() {
 	i.released = []ebiten.Key{}
-	f1Key := i.rawIndex(ebiten.KeyF1)
-	if ebiten.IsKeyPressed(ebiten.KeyF1) {
-		if f1Key < 0 {
-			i.raw = append(i.raw, ebiten.KeyF1)
+	i.collectKeys(
+		ebiten.KeyF1,
+		ebiten.KeyW,
+		ebiten.KeyA,
+		ebiten.KeyS,
+		ebiten.KeyD,
+	)
+}
+
+func (i *InputState) collectKeys(keys ...ebiten.Key) {
+	for _, key := range keys {
+		keyIndex := i.rawIndex(key)
+		if ebiten.IsKeyPressed(key) {
+			if keyIndex < 0 {
+				i.raw = append(i.raw, key)
+			}
+		} else if keyIndex > -1 {
+			i.raw = append(i.raw[:keyIndex], i.raw[keyIndex+1:]...)
+			i.released = append(i.released, key)
 		}
-	} else if f1Key > -1 {
-		i.raw = append(i.raw[:f1Key], i.raw[f1Key+1:]...)
-		i.released = append(i.released, ebiten.KeyF1)
 	}
 }
 

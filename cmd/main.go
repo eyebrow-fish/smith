@@ -13,7 +13,7 @@ const (
 
 func main() {
 	ebiten.SetWindowSize(windowWidth, windowHeight)
-	if err := ebiten.RunGame(&smith.Game{InputState: &smith.InputState{}}); err != nil {
+	if err := ebiten.RunGame(&smith.Game{}); err != nil {
 		log.Fatalf("failure running game: %v", err)
 	}
 }
