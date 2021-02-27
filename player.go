@@ -26,7 +26,7 @@ func NewPlayer(sprite []byte) (*Player, error) {
 		return nil, err
 	}
 	animation := Animation{spriteMap: spriteMap, maxFrame: 1, debounce: 10}
-	return &Player{animation: animation, speed: 3, health: 10, maxHealth: 10}, nil
+	return &Player{animation: animation, speed: 3, health: 8, maxHealth: 10}, nil
 }
 
 func (p *Player) handle(game InputState) {

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"github.com/hajimehoshi/ebiten"
 	"image"
+	"math"
 )
 
 type Hud struct {
@@ -23,11 +24,16 @@ func NewHud(heartSprite []byte) (*Hud, error) {
 }
 
 func (h *Hud) draw(screen *ebiten.Image, player Player) error {
-	for i := 0; i < int(player.health); i++ {
+	roundedHealth := math.Round(float64(player.health))
+	for i := 0; i < int(roundedHealth); i += 2 {
 		_, height := screen.Size()
 		options := &ebiten.DrawImageOptions{}
-		options.GeoM.Translate(float64(i*18+4), float64(height-22))
-		if err := screen.DrawImage(h.heartSprite, options); err != nil {
+		options.GeoM.Translate(float64(i/2*10+4), float64(height-14))
+		sprite := h.heartSprite
+		if i == int(roundedHealth-1) && int(roundedHealth)%2 == 1 {
+			sprite = h.heartSprite.SubImage(image.Rect(4, 8, 0, 0)).(*ebiten.Image)
+		}
+		if err := screen.DrawImage(sprite, options); err != nil {
 			return err
 		}
 	}

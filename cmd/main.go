@@ -16,7 +16,7 @@ const (
 //go:embed smith_proto_1.png
 var playerSprite []byte
 
-//go:embed heart_proto_1.png
+//go:embed heart.png
 var heartSprite []byte
 
 func main() {
