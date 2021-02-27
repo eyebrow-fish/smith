@@ -24,11 +24,16 @@ func (a *Animation) update() (*ebiten.Image, error) {
 			a.frame = 0
 		}
 	}
-	sy := (a.frame / a.maxFrame) * 32
-	spriteTile := a.spriteMap.SubImage(image.Rect(32, sy, 0, sy+32)).(*ebiten.Image)
+	spriteY := (a.frame / a.maxFrame) * 32
+	spriteTile := a.spriteMap.SubImage(image.Rect(32, spriteY, 0, spriteY+32)).(*ebiten.Image)
 	return spriteTile, nil
 }
 
 func (a Animation) String() string {
-	return fmt.Sprintf("frame: %d, buffer: %d, debounce: %d", a.frame, a.buffer, a.debounce)
+	return fmt.Sprintf(
+		"frame: %d, buffer: %d, debounce: %d",
+		a.frame,
+		a.buffer,
+		a.debounce,
+	)
 }

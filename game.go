@@ -26,7 +26,12 @@ func (g *Game) Update(screen *ebiten.Image) error {
 		return err
 	}
 	if g.debugMode {
-		debugText := fmt.Sprintf("fps: %0.f\n%v\n%v", ebiten.CurrentFPS(), g.InputState, g.Player)
+		debugText := fmt.Sprintf(
+			"fps: %0.f\n%v\n%v",
+			ebiten.CurrentFPS(),
+			g.InputState,
+			g.Player,
+		)
 		err := ebitenutil.DebugPrint(screen, debugText)
 		if err != nil {
 			return err

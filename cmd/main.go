@@ -10,6 +10,7 @@ import (
 const (
 	windowWidth  int = 640
 	windowHeight int = 480
+	gameScale    int = 2
 )
 
 //go:embed smith_proto_1.png
@@ -20,7 +21,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to load sprite: %v", err)
 	}
-	options := smith.GameOptions{Scale: 2}
+	options := smith.GameOptions{Scale: gameScale}
 	ebiten.SetWindowSize(windowWidth, windowHeight)
 	ebiten.SetWindowTitle("smith")
 	if err := ebiten.RunGame(smith.NewGame(*player, options)); err != nil {
