@@ -13,10 +13,10 @@ const (
 	gameScale    int = 2
 )
 
-//go:embed smith.png
+//go:embed assets/smith.png
 var playerSprite []byte
 
-//go:embed heart.png
+//go:embed assets/heart.png
 var heartSprite []byte
 
 func main() {
