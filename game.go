@@ -4,22 +4,27 @@ import (
 	"fmt"
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/ebitenutil"
+	"image/color"
 )
 
 type Game struct {
 	InputState
 	Options GameOptions
 	Player  Player
+	Hud     Hud
 }
 
-func NewGame(player Player, options GameOptions) *Game {
-	return &Game{Player: player, Options: options}
+func NewGame(player Player, hud Hud, options GameOptions) *Game {
+	return &Game{Player: player, Hud: hud, Options: options}
 }
 
 func (g *Game) Update(screen *ebiten.Image) error {
 	g.collectInputs()
 	if g.hasReleased(ebiten.KeyF1) {
 		g.debugMode = !g.debugMode
+	}
+	if err := screen.Fill(color.RGBA{R: 0xB2, G: 0xB2, B: 0xF7, A: 0xFF}); err != nil {
+		return err
 	}
 	g.Player.handle(g.InputState)
 	if err := g.Player.draw(screen); err != nil {
@@ -36,6 +41,9 @@ func (g *Game) Update(screen *ebiten.Image) error {
 		if err != nil {
 			return err
 		}
+	}
+	if err := g.Hud.draw(screen, g.Player); err != nil {
+		return err
 	}
 	return nil
 }

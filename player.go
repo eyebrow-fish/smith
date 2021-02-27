@@ -12,6 +12,8 @@ type Player struct {
 	animation Animation
 	speed     float64
 	moving    bool
+	health    float32
+	maxHealth float32
 }
 
 func NewPlayer(sprite []byte) (*Player, error) {
@@ -24,7 +26,7 @@ func NewPlayer(sprite []byte) (*Player, error) {
 		return nil, err
 	}
 	animation := Animation{spriteMap: spriteMap, maxFrame: 1, debounce: 10}
-	return &Player{animation: animation, speed: 3}, nil
+	return &Player{animation: animation, speed: 3, health: 10, maxHealth: 10}, nil
 }
 
 func (p *Player) handle(game InputState) {
@@ -74,6 +76,11 @@ func (p *Player) draw(screen *ebiten.Image) error {
 		return err
 	}
 	return screen.DrawImage(spriteTile, options)
+}
+
+func (p *Player) drawStatuses(screen *ebiten.Image) error {
+
+	return nil
 }
 
 func (p Player) String() string {
