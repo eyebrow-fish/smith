@@ -55,9 +55,7 @@ func (p *Player) handle(game InputState) {
 			p.position.x += p.speed
 			horizontalVelocity++
 		}
-		if verticalVelocity != 0 || horizontalVelocity != 0 {
-			p.moving = true
-		}
+		p.moving = verticalVelocity != 0 || horizontalVelocity != 0
 	} else {
 		p.moving = false
 	}
@@ -79,17 +77,14 @@ func (p *Player) draw(screen *ebiten.Image) error {
 	return screen.DrawImage(spriteTile, options)
 }
 
-func (p *Player) drawStatuses(screen *ebiten.Image) error {
-
-	return nil
-}
-
 func (p Player) String() string {
 	return fmt.Sprintf(
-		"position: [%.2f, %.2f]\nmoving: %v\nanimation:\n%v",
+		"position: [%.2f, %.2f]\nmoving: %v\nhealth: %.2f/%.2f\nanimation:\n%v",
 		p.position.x,
 		p.position.y,
 		p.moving,
+		p.health,
+		p.maxHealth,
 		p.animation,
 	)
 }
