@@ -1,18 +1,20 @@
 package smith
 
 import (
+	"fmt"
+	"github.com/hajimehoshi/ebiten"
 	"image"
 )
 
 type Animation struct {
-	spriteMap image.Image
+	spriteMap *ebiten.Image
 	frame     int
 	maxFrame  int
 	debounce  int
 	buffer    int
 }
 
-func (a *Animation) tick() {
+func (a *Animation) update() (*ebiten.Image, error) {
 	a.buffer++
 	if a.buffer >= a.debounce {
 		a.buffer = 0
@@ -22,4 +24,11 @@ func (a *Animation) tick() {
 			a.frame = 0
 		}
 	}
+	sy := (a.frame / a.maxFrame) * 32
+	spriteTile := a.spriteMap.SubImage(image.Rect(32, sy, 0, sy+32)).(*ebiten.Image)
+	return spriteTile, nil
+}
+
+func (a Animation) String() string {
+	return fmt.Sprintf("frame: %d, buffer: %d, debounce: %d", a.frame, a.buffer, a.debounce)
 }

@@ -54,6 +54,6 @@ func (i *InputState) collectKeys(keys ...ebiten.Key) {
 	}
 }
 
-func (i *InputState) String() string {
-	return fmt.Sprintf("raw: %v\nreleased: %v\n", i.raw, i.released)
+func (i InputState) String() string {
+	return fmt.Sprintf("raw: %v\nreleased: %v", i.raw, i.released)
 }

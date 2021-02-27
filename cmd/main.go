@@ -20,8 +20,10 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to load sprite: %v", err)
 	}
+	options := smith.GameOptions{Scale: 2}
 	ebiten.SetWindowSize(windowWidth, windowHeight)
-	if err := ebiten.RunGame(&smith.Game{Player: *player}); err != nil {
+	ebiten.SetWindowTitle("smith")
+	if err := ebiten.RunGame(smith.NewGame(*player, options)); err != nil {
 		log.Fatalf("failure running game: %v", err)
 	}
 }

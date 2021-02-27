@@ -8,7 +8,12 @@ import (
 
 type Game struct {
 	InputState
-	Player Player
+	Options GameOptions
+	Player  Player
+}
+
+func NewGame(player Player, options GameOptions) *Game {
+	return &Game{Player: player, Options: options}
 }
 
 func (g *Game) Update(screen *ebiten.Image) error {
@@ -16,25 +21,12 @@ func (g *Game) Update(screen *ebiten.Image) error {
 	if g.hasReleased(ebiten.KeyF1) {
 		g.debugMode = !g.debugMode
 	}
-
-	if g.rawIndex(ebiten.KeyW) > -1 {
-		g.Player.position.y -= g.Player.speed
-	}
-	if g.rawIndex(ebiten.KeyS) > -1 {
-		g.Player.position.y += g.Player.speed
-	}
-	if g.rawIndex(ebiten.KeyA) > -1 {
-		g.Player.position.x -= g.Player.speed
-	}
-	if g.rawIndex(ebiten.KeyD) > -1 {
-		g.Player.position.x += g.Player.speed
-	}
-	g.Player.animation.tick()
+	g.Player.handle(g.InputState)
 	if err := g.Player.draw(screen); err != nil {
 		return err
 	}
 	if g.debugMode {
-		debugText := fmt.Sprintf("debug\n%v\n%v", &g.InputState, &g.Player)
+		debugText := fmt.Sprintf("fps: %0.f\n%v\n%v", ebiten.CurrentFPS(), g.InputState, g.Player)
 		err := ebitenutil.DebugPrint(screen, debugText)
 		if err != nil {
 			return err
@@ -44,7 +36,11 @@ func (g *Game) Update(screen *ebiten.Image) error {
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
-	return outsideWidth, outsideHeight
+	return outsideWidth / g.Options.Scale, outsideHeight / g.Options.Scale
+}
+
+type GameOptions struct {
+	Scale int
 }
 
 type Vertex2 struct {
