@@ -25,8 +25,8 @@ func NewPlayer(sprite []byte) (*Player, error) {
 	if err != nil {
 		return nil, err
 	}
-	animation := Animation{spriteMap: spriteMap, maxFrame: 1, debounce: 10}
-	return &Player{animation: animation, speed: 3, health: 8, maxHealth: 10}, nil
+	animation := Animation{spriteMap: spriteMap, maxFrame: 2, debounce: 5}
+	return &Player{animation: animation, speed: 1, health: 10, maxHealth: 10}, nil
 }
 
 func (p *Player) handle(game InputState) {
@@ -66,10 +66,11 @@ func (p *Player) handle(game InputState) {
 func (p *Player) draw(screen *ebiten.Image) error {
 	options := &ebiten.DrawImageOptions{}
 	options.GeoM.Translate(p.position.x, p.position.y)
+	options.GeoM.Scale(2, 2)
 	if p.moving {
-		p.animation.debounce = 10
+		p.animation.maxFrame = 2
 	} else {
-		p.animation.debounce = 50
+		p.animation.maxFrame = 0
 	}
 	spriteTile, err := p.animation.update()
 	if err != nil {
@@ -85,7 +86,7 @@ func (p *Player) drawStatuses(screen *ebiten.Image) error {
 
 func (p Player) String() string {
 	return fmt.Sprintf(
-		"position: [%.2f, %.2f]\nmoving: %v\nanimation: %v",
+		"position: [%.2f, %.2f]\nmoving: %v\nanimation:\n%v",
 		p.position.x,
 		p.position.y,
 		p.moving,

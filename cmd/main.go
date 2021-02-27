@@ -13,7 +13,7 @@ const (
 	gameScale    int = 2
 )
 
-//go:embed smith_proto_1.png
+//go:embed smith.png
 var playerSprite []byte
 
 //go:embed heart.png

@@ -23,7 +23,7 @@ func (g *Game) Update(screen *ebiten.Image) error {
 	if g.hasReleased(ebiten.KeyF1) {
 		g.debugMode = !g.debugMode
 	}
-	if err := screen.Fill(color.RGBA{R: 0xB2, G: 0xB2, B: 0xF7, A: 0xFF}); err != nil {
+	if err := screen.Fill(color.RGBA{R: 0x00, G: 0x00, B: 0x00, A: 0xFF}); err != nil {
 		return err
 	}
 	g.Player.handle(g.InputState)
