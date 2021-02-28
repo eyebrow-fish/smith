@@ -8,12 +8,13 @@ import (
 )
 
 type Player struct {
-	position  Vertex2
-	animation Animation
-	speed     float64
-	moving    bool
-	health    float32
-	maxHealth float32
+	position     Vertex2
+	animation    Animation
+	speed        float64
+	moving       bool
+	health       float32
+	maxHealth    float32
+	healthStatus healthStatus
 }
 
 func NewPlayer(sprite []byte) (*Player, error) {
@@ -83,12 +84,21 @@ func (p *Player) draw(screen *ebiten.Image) error {
 
 func (p Player) String() string {
 	return fmt.Sprintf(
-		"position: [%.2f, %.2f]\nmoving: %v\nhealth: %.2f/%.2f\nanimation:\n%v",
+		"position: [%.2f, %.2f]\nmoving: %v\nhealth: %.2f/%.2f %d\nanimation:\n%v",
 		p.position.x,
 		p.position.y,
 		p.moving,
 		p.health,
 		p.maxHealth,
+		p.healthStatus,
 		p.animation,
 	)
 }
+
+type healthStatus uint8
+
+const (
+	healthy healthStatus = iota
+	poison
+	freezing
+)

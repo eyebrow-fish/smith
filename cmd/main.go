@@ -31,6 +31,7 @@ func main() {
 	options := smith.GameOptions{Scale: gameScale}
 	ebiten.SetWindowSize(windowWidth, windowHeight)
 	ebiten.SetWindowTitle("smith")
+	ebiten.SetWindowResizable(true)
 	if err := ebiten.RunGame(smith.NewGame(*player, *hud, options)); err != nil {
 		log.Fatalf("failure running game: %v", err)
 	}
