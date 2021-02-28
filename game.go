@@ -12,10 +12,7 @@ type Game struct {
 	Options GameOptions
 	Player  Player
 	Hud     Hud
-}
-
-func NewGame(player Player, hud Hud, options GameOptions) *Game {
-	return &Game{Player: player, Hud: hud, Options: options}
+	World   World
 }
 
 func (g *Game) Update(screen *ebiten.Image) error {
@@ -24,6 +21,9 @@ func (g *Game) Update(screen *ebiten.Image) error {
 		g.debugMode = !g.debugMode
 	}
 	if err := screen.Fill(color.RGBA{A: 0xFF}); err != nil {
+		return err
+	}
+	if err := g.World.draw(screen); err != nil {
 		return err
 	}
 	g.Player.handle(g.InputState)
@@ -56,7 +56,7 @@ type GameOptions struct {
 	Scale int
 }
 
-type Vertex2 struct {
+type vertex2 struct {
 	x float64
 	y float64
 }

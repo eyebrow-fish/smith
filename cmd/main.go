@@ -19,6 +19,9 @@ var playerSprite []byte
 //go:embed assets/heart.png
 var heartSprite []byte
 
+//go:embed assets/ground.png
+var worldSprite []byte
+
 func main() {
 	player, err := smith.NewPlayer(playerSprite)
 	if err != nil {
@@ -28,11 +31,21 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to load sprite: %v", err)
 	}
+	world, err := smith.NewWorld(worldSprite)
+	if err != nil {
+		log.Fatalf("failed to load world sprite map: %v", err)
+	}
 	options := smith.GameOptions{Scale: gameScale}
+	game := &smith.Game{
+		Player: *player,
+		Hud: *hud,
+		World: *world,
+		Options: options,
+	}
 	ebiten.SetWindowSize(windowWidth, windowHeight)
 	ebiten.SetWindowTitle("smith")
 	ebiten.SetWindowResizable(true)
-	if err := ebiten.RunGame(smith.NewGame(*player, *hud, options)); err != nil {
+	if err := ebiten.RunGame(game); err != nil {
 		log.Fatalf("failure running game: %v", err)
 	}
 }

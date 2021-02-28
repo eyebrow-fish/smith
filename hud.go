@@ -39,7 +39,7 @@ func (h *Hud) draw(screen *ebiten.Image, player Player) error {
 		}
 		sprite := h.heartSprite
 		if i == int(roundedHealth-1) && int(roundedHealth)%2 == 1 {
-			sprite = h.heartSprite.SubImage(image.Rect(4, 8, 0, 0)).(*ebiten.Image)
+			sprite = h.heartSprite.SubImage(image.Rect(0, 0, 4, 8)).(*ebiten.Image)
 		}
 		if err := screen.DrawImage(sprite, options); err != nil {
 			return err

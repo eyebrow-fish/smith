@@ -8,7 +8,7 @@ import (
 )
 
 type Player struct {
-	position     Vertex2
+	position     vertex2
 	animation    Animation
 	speed        float64
 	moving       bool
