@@ -40,18 +40,22 @@ func (p *Player) handle(game InputState) {
 			horizontalVelocity int
 		)
 		if game.rawIndex(ebiten.KeyW) > -1 {
+			p.animation.direction = up
 			p.position.y -= p.speed
 			verticalVelocity--
 		}
 		if game.rawIndex(ebiten.KeyS) > -1 {
+			p.animation.direction = down
 			p.position.y += p.speed
 			verticalVelocity++
 		}
 		if game.rawIndex(ebiten.KeyA) > -1 {
+			p.animation.direction = down
 			p.position.x -= p.speed
 			horizontalVelocity--
 		}
 		if game.rawIndex(ebiten.KeyD) > -1 {
+			p.animation.direction = up
 			p.position.x += p.speed
 			horizontalVelocity++
 		}
@@ -66,9 +70,9 @@ func (p *Player) draw(screen *ebiten.Image) error {
 	options.GeoM.Translate(p.position.x, p.position.y)
 	options.GeoM.Scale(2, 2)
 	if p.moving {
-		p.animation.maxFrame = 2
+		p.animation.paused = false
 	} else {
-		p.animation.maxFrame = 0
+		p.animation.paused = true
 	}
 	spriteTile, err := p.animation.update()
 	if err != nil {

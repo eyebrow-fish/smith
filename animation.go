@@ -12,20 +12,34 @@ type Animation struct {
 	maxFrame  int
 	debounce  int
 	buffer    int
+	direction animationDirection
+	paused    bool
 }
 
 func (a *Animation) update() (*ebiten.Image, error) {
-	a.buffer++
-	if a.buffer >= a.debounce {
-		a.buffer = 0
-		if a.frame < a.maxFrame {
-			a.frame++
-		} else {
-			a.frame = 0
+	if a.paused {
+		a.frame = 0
+	} else {
+		a.buffer++
+		if a.buffer >= a.debounce {
+			a.buffer = 0
+			if a.direction == down {
+				if a.frame < a.maxFrame {
+					a.frame++
+				} else {
+					a.frame = 0
+				}
+			} else if a.direction == up {
+				if a.frame > 0 {
+					a.frame--
+				} else {
+					a.frame = a.maxFrame
+				}
+			}
 		}
 	}
 	spriteY := a.frame * 10
-	spriteTile := a.spriteMap.SubImage(image.Rect(10, spriteY, 0, spriteY+10)).(*ebiten.Image)
+	spriteTile := a.spriteMap.SubImage(image.Rect(0, spriteY, 10, spriteY+10)).(*ebiten.Image)
 	return spriteTile, nil
 }
 
@@ -38,3 +52,10 @@ func (a Animation) String() string {
 		a.debounce,
 	)
 }
+
+type animationDirection uint8
+
+const (
+	down animationDirection = iota
+	up
+)
