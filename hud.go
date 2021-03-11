@@ -3,6 +3,7 @@ package smith
 import (
 	"bytes"
 	"github.com/hajimehoshi/ebiten"
+	"github.com/hajimehoshi/ebiten/ebitenutil"
 	"image"
 	"math"
 )
@@ -26,6 +27,13 @@ func NewHud(heartSprite []byte) (*Hud, error) {
 }
 
 func (h *Hud) draw(screen *ebiten.Image, player Player) error {
+	if player.health <= 0 {
+		x, y := screen.Size()
+		ebitenutil.DebugPrintAt(screen, "x(", x / 2, y / 2)
+
+		return nil
+	}
+
 	roundedHealth := math.Round(float64(player.health))
 	for i := 0; i < int(roundedHealth); i += 2 {
 		_, height := screen.Size()
@@ -51,5 +59,6 @@ func (h *Hud) draw(screen *ebiten.Image, player Player) error {
 			return err
 		}
 	}
+
 	return nil
 }

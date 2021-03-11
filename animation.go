@@ -39,8 +39,8 @@ func (a *Animation) update() (*ebiten.Image, error) {
 		}
 	}
 
-	spriteY := a.frame * 10
-	spriteTile := a.spriteMap.SubImage(image.Rect(0, spriteY, 10, spriteY+10)).(*ebiten.Image)
+	spriteY := a.frame * SpriteSize
+	spriteTile := a.spriteMap.SubImage(image.Rect(0, spriteY, SpriteSize, spriteY+SpriteSize)).(*ebiten.Image)
 
 	return spriteTile, nil
 }

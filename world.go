@@ -27,8 +27,8 @@ func NewWorld(worldSprite []byte) (*World, error) {
 	for x := 0; x < 10; x++ {
 		for y := 0; y < 10; y++ {
 			groundTile := newGroundTile(
-				vertex2{2, 2},
-				vertex2{float64(10 * x), float64(10 * y)},
+				2,
+				vertex2{float64(SpriteSize * x), float64(SpriteSize * y)},
 			)
 			groundTiles = append(groundTiles, groundTile)
 		}
@@ -41,11 +41,16 @@ func (w *World) draw(screen *ebiten.Image) error {
 	for _, t := range w.tiles {
 		options := &ebiten.DrawImageOptions{}
 		options.GeoM.Translate(t.position.x, t.position.y)
-		options.GeoM.Scale(t.scale.x, t.scale.y)
+		options.GeoM.Scale(t.scale, t.scale)
 
-		spriteX := t.row * 10
-		spriteY := t.column * 10
-		tileSprite := w.worldMap.SubImage(image.Rect(spriteX, spriteY, spriteX+10, spriteY+10)).(*ebiten.Image)
+		spriteX := t.row * SpriteSize
+		spriteY := t.column * SpriteSize
+		tileSprite := w.worldMap.SubImage(image.Rect(
+			spriteX,
+			spriteY,
+			spriteX+SpriteSize,
+			spriteY+SpriteSize,
+		)).(*ebiten.Image)
 
 		if err := screen.DrawImage(tileSprite, options); err != nil {
 			return err
@@ -55,13 +60,13 @@ func (w *World) draw(screen *ebiten.Image) error {
 	return nil
 }
 
-func newGroundTile(scale vertex2, position vertex2) tile {
+func newGroundTile(scale float64, position vertex2) tile {
 	return tile{scale: scale, position: position}
 }
 
 type tile struct {
 	row      int
 	column   int
-	scale    vertex2
+	scale    float64
 	position vertex2
 }

@@ -7,6 +7,10 @@ import (
 	"image/color"
 )
 
+const (
+	SpriteSize int = 10
+)
+
 type Game struct {
 	InputState
 	Options GameOptions
