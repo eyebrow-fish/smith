@@ -38,13 +38,13 @@ func NewWorld(worldSprite []byte) (*World, error) {
 }
 
 func (w *World) draw(screen *ebiten.Image) error {
-	for _, tile := range w.tiles {
+	for _, t := range w.tiles {
 		options := &ebiten.DrawImageOptions{}
-		options.GeoM.Translate(tile.position.x, tile.position.y)
-		options.GeoM.Scale(tile.scale.x, tile.scale.y)
+		options.GeoM.Translate(t.position.x, t.position.y)
+		options.GeoM.Scale(t.scale.x, t.scale.y)
 
-		spriteX := tile.row * 10
-		spriteY := tile.column * 10
+		spriteX := t.row * 10
+		spriteY := t.column * 10
 		tile := w.worldMap.SubImage(image.Rect(spriteX, spriteY, spriteX+10, spriteY+10)).(*ebiten.Image)
 
 		if err := screen.DrawImage(tile, options); err != nil {
