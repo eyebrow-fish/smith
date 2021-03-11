@@ -29,8 +29,8 @@ func NewHud() (*Hud, error) {
 func (h *Hud) draw(screen *ebiten.Image, player Player) error {
 	if player.health <= 0 {
 		x, y := screen.Size()
-		ebitenutil.DebugPrintAt(screen, "x(", x - 100, y - 80)
-		ebitenutil.DebugPrintAt(screen, "space to retry", x - 100, y - 60)
+		ebitenutil.DebugPrintAt(screen, "x(", x-100, y-80)
+		ebitenutil.DebugPrintAt(screen, "space to retry", x-100, y-60)
 
 		return nil
 	}

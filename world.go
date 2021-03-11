@@ -72,8 +72,8 @@ type tile struct {
 }
 
 type worldData struct {
-	Scale   float64             `json:"scale"`
-	Tiles   []tileData          `json:"tiles"`
+	Scale   float64           `json:"scale"`
+	Tiles   []tileData        `json:"tiles"`
 	TileMap map[string][2]int `json:"tile_map"`
 }
 

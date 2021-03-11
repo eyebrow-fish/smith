@@ -30,9 +30,9 @@ func main() {
 
 	options := smith.GameOptions{Scale: gameScale}
 	game := &smith.Game{
-		Player: *player,
-		Hud: *hud,
-		World: *world,
+		Player:  *player,
+		Hud:     *hud,
+		World:   *world,
 		Options: options,
 	}
 

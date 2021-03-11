@@ -3,10 +3,121 @@
   "tiles": [
     {
       "type": "ground",
-      "position": [0, 0]
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "type": "ground",
+      "position": [
+        10,
+        0
+      ]
+    },
+    {
+      "type": "ground",
+      "position": [
+        20,
+        0
+      ]
+    },
+    {
+      "type": "ground",
+      "position": [
+        30,
+        0
+      ]
+    },
+    {
+      "type": "ground",
+      "position": [
+        10,
+        10
+      ]
+    },
+    {
+      "type": "ground",
+      "position": [
+        20,
+        10
+      ]
+    },
+    {
+      "type": "ground",
+      "position": [
+        10,
+        20
+      ]
+    },
+    {
+      "type": "ground",
+      "position": [
+        10,
+        30
+      ]
+    },
+    {
+      "type": "ground",
+      "position": [
+        50,
+        0
+      ]
+    },
+    {
+      "type": "ground",
+      "position": [
+        60,
+        0
+      ]
+    },
+    {
+      "type": "ground",
+      "position": [
+        60,
+        10
+      ]
+    },
+    {
+      "type": "ground",
+      "position": [
+        50,
+        10
+      ]
+    },
+    {
+      "type": "ground",
+      "position": [
+        50,
+        20
+      ]
+    },
+    {
+      "type": "ground",
+      "position": [
+        20,
+        10
+      ]
+    },
+    {
+      "type": "ground",
+      "position": [
+        10,
+        20
+      ]
+    },
+    {
+      "type": "ground",
+      "position": [
+        10,
+        30
+      ]
     }
   ],
   "tile_map": {
-    "ground": [0, 0]
+    "ground": [
+      0,
+      0
+    ]
   }
 }

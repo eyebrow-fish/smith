@@ -34,12 +34,12 @@ func NewPlayer() (*Player, error) {
 	animation := Animation{spriteMap: spriteMap, maxFrame: 2, debounce: 5}
 
 	return &Player{
-		scale: 2,
-		animation: animation,
-		speed: 1,
+		scale:         2,
+		animation:     animation,
+		speed:         1,
 		speedModifier: 1,
-		health: 10,
-		maxHealth: 10,
+		health:        10,
+		maxHealth:     10,
 	}, nil
 }
 
@@ -101,11 +101,7 @@ func (p *Player) draw(screen *ebiten.Image) error {
 	options.GeoM.Scale(p.scale, p.scale)
 	options.GeoM.Translate(p.position.x, p.position.y)
 
-	if p.moving {
-		p.animation.paused = false
-	} else {
-		p.animation.paused = true
-	}
+	p.animation.paused = !p.moving
 
 	spriteTile, err := p.animation.update()
 	if err != nil {
@@ -120,19 +116,20 @@ func (p *Player) physics(world World) error {
 	for _, t := range world.tiles {
 		playerPosition := p.position
 		playerSize := vertex2{float64(SpriteSize), float64(SpriteSize)}.scaleBy(p.scale)
+		invertedFallBuffer := 2.5
 
 		tilePosition := t.position.scaleBy(t.scale)
 		tileSize := t.scale * float64(SpriteSize)
 
-		boundUpperX := tilePosition.x <= playerPosition.x &&
-			tilePosition.x+tileSize >= playerPosition.x
-		boundUpperY := tilePosition.y <= playerPosition.y &&
-			tilePosition.y+tileSize >= playerPosition.y
+		boundUpperX := tilePosition.x <= playerPosition.x+invertedFallBuffer &&
+			tilePosition.x+tileSize >= playerPosition.x+invertedFallBuffer
+		boundUpperY := tilePosition.y <= playerPosition.y+invertedFallBuffer &&
+			tilePosition.y+tileSize >= playerPosition.y+invertedFallBuffer
 
-		boundLowerX := tilePosition.x <= playerPosition.x+playerSize.x &&
-			tilePosition.x+tileSize >= playerPosition.x+playerSize.x
-		boundLowerY := tilePosition.y <= playerPosition.y+playerSize.y &&
-			tilePosition.y+tileSize >= playerPosition.y+playerSize.y
+		boundLowerX := tilePosition.x <= playerPosition.x+playerSize.x-invertedFallBuffer &&
+			tilePosition.x+tileSize >= playerPosition.x+playerSize.x-invertedFallBuffer
+		boundLowerY := tilePosition.y <= playerPosition.y+playerSize.y-invertedFallBuffer &&
+			tilePosition.y+tileSize >= playerPosition.y+playerSize.y-invertedFallBuffer
 
 		if (boundUpperX && boundUpperY) || (boundLowerX && boundLowerY) {
 			inTile = true
@@ -140,7 +137,7 @@ func (p *Player) physics(world World) error {
 		}
 	}
 
-	p.falling = !inTile
+	p.falling = p.falling || !inTile
 
 	return nil
 }
