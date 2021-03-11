@@ -15,6 +15,7 @@ type Player struct {
 	health       float32
 	maxHealth    float32
 	healthStatus healthStatus
+	falling      bool
 }
 
 func NewPlayer(sprite []byte) (*Player, error) {
@@ -93,7 +94,7 @@ func (p *Player) draw(screen *ebiten.Image) error {
 
 func (p Player) String() string {
 	return fmt.Sprintf(
-		"position: [%.2f, %.2f]\nmoving: %v\nhealth: %.2f/%.2f %d\nanimation:\n%v",
+		"position: [%.2f, %.2f]\nmoving: %v\nhealth: %.2f/%.2f %s\nanimation:\n%v",
 		p.position.x,
 		p.position.y,
 		p.moving,
@@ -108,6 +109,10 @@ type healthStatus uint8
 
 const (
 	healthy healthStatus = iota
-	poison
+	poisoned
 	freezing
 )
+
+func (h healthStatus) String() string {
+	return [...]string{"Healthy", "Poisoned", "Freezing"}[h]
+}

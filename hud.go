@@ -36,7 +36,7 @@ func (h *Hud) draw(screen *ebiten.Image, player Player) error {
 		switch player.healthStatus {
 		case healthy:
 			options.ColorM.Scale(0xff, 0x0, 0x0, 0xff)
-		case poison:
+		case poisoned:
 			options.ColorM.Scale(0x0, 0xff, 0x0, 0xff)
 		case freezing:
 			options.ColorM.Scale(0x0, 0x0, 0xff, 0xff)

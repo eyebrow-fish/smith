@@ -20,6 +20,7 @@ func (g *Game) Update(screen *ebiten.Image) error {
 	if g.hasReleased(ebiten.KeyF1) {
 		g.debugMode = !g.debugMode
 	}
+	g.Player.handle(g.InputState)
 
 	if err := screen.Fill(color.RGBA{A: 0xFF}); err != nil {
 		return err
@@ -28,10 +29,10 @@ func (g *Game) Update(screen *ebiten.Image) error {
 	if err := g.World.draw(screen); err != nil {
 		return err
 	}
-
-	g.Player.handle(g.InputState)
-
 	if err := g.Player.draw(screen); err != nil {
+		return err
+	}
+	if err := g.Hud.draw(screen, g.Player); err != nil {
 		return err
 	}
 
@@ -46,10 +47,6 @@ func (g *Game) Update(screen *ebiten.Image) error {
 		if err != nil {
 			return err
 		}
-	}
-
-	if err := g.Hud.draw(screen, g.Player); err != nil {
-		return err
 	}
 
 	return nil
