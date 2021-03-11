@@ -45,9 +45,9 @@ func (w *World) draw(screen *ebiten.Image) error {
 
 		spriteX := t.row * 10
 		spriteY := t.column * 10
-		tile := w.worldMap.SubImage(image.Rect(spriteX, spriteY, spriteX+10, spriteY+10)).(*ebiten.Image)
+		tileSprite := w.worldMap.SubImage(image.Rect(spriteX, spriteY, spriteX+10, spriteY+10)).(*ebiten.Image)
 
-		if err := screen.DrawImage(tile, options); err != nil {
+		if err := screen.DrawImage(tileSprite, options); err != nil {
 			return err
 		}
 	}
