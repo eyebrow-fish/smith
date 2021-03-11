@@ -12,8 +12,8 @@ type Hud struct {
 	heartSprite *ebiten.Image
 }
 
-func NewHud(heartSprite []byte) (*Hud, error) {
-	spriteMapImage, _, err := image.Decode(bytes.NewReader(heartSprite))
+func NewHud() (*Hud, error) {
+	spriteMapImage, _, err := image.Decode(bytes.NewReader(HeartSprite))
 	if err != nil {
 		return nil, err
 	}
@@ -29,7 +29,8 @@ func NewHud(heartSprite []byte) (*Hud, error) {
 func (h *Hud) draw(screen *ebiten.Image, player Player) error {
 	if player.health <= 0 {
 		x, y := screen.Size()
-		ebitenutil.DebugPrintAt(screen, "x(", x / 2, y / 2)
+		ebitenutil.DebugPrintAt(screen, "x(", x - 100, y - 80)
+		ebitenutil.DebugPrintAt(screen, "space to retry", x - 100, y - 60)
 
 		return nil
 	}

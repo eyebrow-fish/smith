@@ -20,8 +20,8 @@ type Player struct {
 	falling       bool
 }
 
-func NewPlayer(sprite []byte) (*Player, error) {
-	spriteMapImage, _, err := image.Decode(bytes.NewReader(sprite))
+func NewPlayer() (*Player, error) {
+	spriteMapImage, _, err := image.Decode(bytes.NewReader(PlayerSprite))
 	if err != nil {
 		return nil, err
 	}

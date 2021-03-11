@@ -1,6 +1,7 @@
 package smith
 
 import (
+	_ "embed"
 	"fmt"
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/ebitenutil"
@@ -9,6 +10,17 @@ import (
 
 const (
 	SpriteSize int = 10
+)
+
+var (
+	//go:embed assets/smith.png
+	PlayerSprite []byte
+
+	//go:embed assets/heart.png
+	HeartSprite []byte
+
+	//go:embed assets/ground.png
+	WorldSprite []byte
 )
 
 type Game struct {
@@ -44,6 +56,10 @@ func (g *Game) Update(screen *ebiten.Image) error {
 		return err
 	}
 
+	return g.handle(screen)
+}
+
+func (g *Game) handle(screen *ebiten.Image) error {
 	if g.debugMode {
 		debugText := fmt.Sprintf(
 			"fps: %.f\n%v\n%v",
@@ -54,6 +70,14 @@ func (g *Game) Update(screen *ebiten.Image) error {
 		err := ebitenutil.DebugPrint(screen, debugText)
 		if err != nil {
 			return err
+		}
+	}
+
+	if g.Player.health <= 0 && g.hasReleased(ebiten.KeySpace) {
+		if player, err := NewPlayer(); err != nil {
+			return err
+		} else {
+			g.Player = *player
 		}
 	}
 

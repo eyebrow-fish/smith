@@ -37,6 +37,7 @@ func (i *InputState) collectInputs() {
 		ebiten.KeyA,
 		ebiten.KeyS,
 		ebiten.KeyD,
+		ebiten.KeySpace,
 	)
 }
 

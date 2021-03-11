@@ -11,8 +11,8 @@ type World struct {
 	tiles    []tile
 }
 
-func NewWorld(worldSprite []byte) (*World, error) {
-	spriteMapImage, _, err := image.Decode(bytes.NewReader(worldSprite))
+func NewWorld() (*World, error) {
+	spriteMapImage, _, err := image.Decode(bytes.NewReader(WorldSprite))
 	if err != nil {
 		return nil, err
 	}

@@ -1,7 +1,6 @@
 package main
 
 import (
-	_ "embed"
 	"github.com/eyebrow-fish/smith"
 	"github.com/hajimehoshi/ebiten"
 	"log"
@@ -13,27 +12,18 @@ const (
 	gameScale    int = 2
 )
 
-//go:embed assets/smith.png
-var playerSprite []byte
-
-//go:embed assets/heart.png
-var heartSprite []byte
-
-//go:embed assets/ground.png
-var worldSprite []byte
-
 func main() {
-	player, err := smith.NewPlayer(playerSprite)
+	player, err := smith.NewPlayer()
 	if err != nil {
 		log.Fatalf("failed to load sprite: %v", err)
 	}
 
-	hud, err := smith.NewHud(heartSprite)
+	hud, err := smith.NewHud()
 	if err != nil {
 		log.Fatalf("failed to load sprite: %v", err)
 	}
 
-	world, err := smith.NewWorld(worldSprite)
+	world, err := smith.NewWorld()
 	if err != nil {
 		log.Fatalf("failed to load world sprite map: %v", err)
 	}
