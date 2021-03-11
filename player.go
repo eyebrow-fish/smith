@@ -22,11 +22,14 @@ func NewPlayer(sprite []byte) (*Player, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	spriteMap, err := ebiten.NewImageFromImage(spriteMapImage, ebiten.FilterDefault)
 	if err != nil {
 		return nil, err
 	}
+
 	animation := Animation{spriteMap: spriteMap, maxFrame: 2, debounce: 5}
+
 	return &Player{animation: animation, speed: 1, health: 10, maxHealth: 10}, nil
 }
 
@@ -35,11 +38,13 @@ func (p *Player) handle(game InputState) {
 		game.rawIndex(ebiten.KeyS) &
 		game.rawIndex(ebiten.KeyA) &
 		game.rawIndex(ebiten.KeyD)
+
 	if movementKeysPressed > -1 {
 		var (
 			verticalVelocity   int
 			horizontalVelocity int
 		)
+
 		if game.rawIndex(ebiten.KeyW) > -1 {
 			p.animation.direction = up
 			p.position.y -= p.speed
@@ -60,6 +65,7 @@ func (p *Player) handle(game InputState) {
 			p.position.x += p.speed
 			horizontalVelocity++
 		}
+
 		p.moving = verticalVelocity != 0 || horizontalVelocity != 0
 	} else {
 		p.moving = false
@@ -70,15 +76,18 @@ func (p *Player) draw(screen *ebiten.Image) error {
 	options := &ebiten.DrawImageOptions{}
 	options.GeoM.Translate(p.position.x, p.position.y)
 	options.GeoM.Scale(2, 2)
+
 	if p.moving {
 		p.animation.paused = false
 	} else {
 		p.animation.paused = true
 	}
+
 	spriteTile, err := p.animation.update()
 	if err != nil {
 		return err
 	}
+
 	return screen.DrawImage(spriteTile, options)
 }
 

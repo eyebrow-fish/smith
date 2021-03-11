@@ -20,16 +20,21 @@ func (g *Game) Update(screen *ebiten.Image) error {
 	if g.hasReleased(ebiten.KeyF1) {
 		g.debugMode = !g.debugMode
 	}
+
 	if err := screen.Fill(color.RGBA{A: 0xFF}); err != nil {
 		return err
 	}
+
 	if err := g.World.draw(screen); err != nil {
 		return err
 	}
+
 	g.Player.handle(g.InputState)
+
 	if err := g.Player.draw(screen); err != nil {
 		return err
 	}
+
 	if g.debugMode {
 		debugText := fmt.Sprintf(
 			"fps: %.f\n%v\n%v",
@@ -42,9 +47,11 @@ func (g *Game) Update(screen *ebiten.Image) error {
 			return err
 		}
 	}
+
 	if err := g.Hud.draw(screen, g.Player); err != nil {
 		return err
 	}
+
 	return nil
 }
 

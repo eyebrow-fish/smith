@@ -16,10 +16,12 @@ func NewWorld(worldSprite []byte) (*World, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	spriteMap, err := ebiten.NewImageFromImage(spriteMapImage, ebiten.FilterNearest)
 	if err != nil {
 		return nil, err
 	}
+
 	// Very temporary way of loading the world.
 	var groundTiles []tile
 	for x := 0; x < 10; x++ {
@@ -31,6 +33,7 @@ func NewWorld(worldSprite []byte) (*World, error) {
 			groundTiles = append(groundTiles, groundTile)
 		}
 	}
+
 	return &World{worldMap: spriteMap, tiles: groundTiles}, nil
 }
 
@@ -39,13 +42,16 @@ func (w *World) draw(screen *ebiten.Image) error {
 		options := &ebiten.DrawImageOptions{}
 		options.GeoM.Translate(tile.position.x, tile.position.y)
 		options.GeoM.Scale(tile.scale.x, tile.scale.y)
+
 		spriteX := tile.row * 10
 		spriteY := tile.column * 10
 		tile := w.worldMap.SubImage(image.Rect(spriteX, spriteY, spriteX+10, spriteY+10)).(*ebiten.Image)
+
 		if err := screen.DrawImage(tile, options); err != nil {
 			return err
 		}
 	}
+
 	return nil
 }
 
