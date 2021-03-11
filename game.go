@@ -19,8 +19,11 @@ var (
 	//go:embed assets/heart.png
 	HeartSprite []byte
 
-	//go:embed assets/ground.png
+	//go:embed assets/world.png
 	WorldSprite []byte
+
+	//go:embed assets/world.json
+	WorldRawData []byte
 )
 
 type Game struct {

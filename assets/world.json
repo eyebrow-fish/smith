@@ -1,0 +1,12 @@
+{
+  "scale": 2,
+  "tiles": [
+    {
+      "type": "ground",
+      "position": [0, 0]
+    }
+  ],
+  "tile_map": {
+    "ground": [0, 0]
+  }
+}

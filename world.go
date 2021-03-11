@@ -2,6 +2,7 @@ package smith
 
 import (
 	"bytes"
+	"encoding/json"
 	"github.com/hajimehoshi/ebiten"
 	"image"
 )
@@ -22,19 +23,22 @@ func NewWorld() (*World, error) {
 		return nil, err
 	}
 
-	// Very temporary way of loading the world.
-	var groundTiles []tile
-	for x := 0; x < 10; x++ {
-		for y := 0; y < 10; y++ {
-			groundTile := newGroundTile(
-				2,
-				vertex2{float64(SpriteSize * x), float64(SpriteSize * y)},
-			)
-			groundTiles = append(groundTiles, groundTile)
-		}
+	var wd worldData
+	if err := json.Unmarshal(WorldRawData, &wd); err != nil {
+		return nil, err
 	}
 
-	return &World{worldMap: spriteMap, tiles: groundTiles}, nil
+	var tiles []tile
+	for _, t := range wd.Tiles {
+		tt := wd.TileMap[t.Type]
+		position := vertex2{t.Position[0], t.Position[1]}
+		tiles = append(
+			tiles,
+			tile{tt[0], tt[1], wd.Scale, position},
+		)
+	}
+
+	return &World{worldMap: spriteMap, tiles: tiles}, nil
 }
 
 func (w *World) draw(screen *ebiten.Image) error {
@@ -60,13 +64,20 @@ func (w *World) draw(screen *ebiten.Image) error {
 	return nil
 }
 
-func newGroundTile(scale float64, position vertex2) tile {
-	return tile{scale: scale, position: position}
-}
-
 type tile struct {
-	row      int
 	column   int
+	row      int
 	scale    float64
 	position vertex2
+}
+
+type worldData struct {
+	Scale   float64             `json:"scale"`
+	Tiles   []tileData          `json:"tiles"`
+	TileMap map[string][2]int `json:"tile_map"`
+}
+
+type tileData struct {
+	Type     string     `json:"type"`
+	Position [2]float64 `json:"position"`
 }
