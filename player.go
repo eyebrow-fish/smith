@@ -92,9 +92,39 @@ func (p *Player) draw(screen *ebiten.Image) error {
 	return screen.DrawImage(spriteTile, options)
 }
 
+func (p *Player) physics(world World) error {
+	var inTile bool
+	for _, t := range world.tiles {
+		playerPosition := p.position.scaleBy(2)
+		playerSize := vertex2{10, 10}.scaleBy(2)
+
+		tilePosition := t.position.scale(t.scale)
+		tileSize := t.scale.scaleBy(10)
+
+		boundUpperX := tilePosition.x <= playerPosition.x &&
+			tilePosition.x + tileSize.x >= playerPosition.x
+		boundUpperY := tilePosition.y <= playerPosition.y &&
+			tilePosition.y + tileSize.y >= playerPosition.y
+
+		boundLowerX := tilePosition.x <= playerPosition.x + playerSize.x &&
+			tilePosition.x + tileSize.x >= playerPosition.x + playerSize.x
+		boundLowerY := tilePosition.y <= playerPosition.y + playerSize.y &&
+			tilePosition.y + tileSize.y >= playerPosition.y + playerSize.y
+
+		if (boundUpperX && boundUpperY) || (boundLowerX && boundLowerY) {
+			inTile = true
+			break
+		}
+	}
+
+	p.falling = !inTile
+
+	return nil
+}
+
 func (p Player) String() string {
 	return fmt.Sprintf(
-		"position: [%.2f, %.2f]\nmoving: %v\nhealth: %.2f/%.2f %s\nanimation:\n%v",
+		"position: [%.2f, %.2f]\nmoving: %v\nhealth: %.2f/%.2f %s\nanimation:\n%v\nfalling: %v",
 		p.position.x,
 		p.position.y,
 		p.moving,
@@ -102,6 +132,7 @@ func (p Player) String() string {
 		p.maxHealth,
 		p.healthStatus,
 		p.animation,
+		p.falling,
 	)
 }
 
