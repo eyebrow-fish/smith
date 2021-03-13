@@ -7,10 +7,10 @@ import (
 	"image"
 )
 
-type Player struct {
+type player struct {
 	scale         float64
 	position      vertex2
-	animation     Animation
+	animation     animation
 	speed         float64
 	speedModifier float64
 	moving        bool
@@ -20,7 +20,7 @@ type Player struct {
 	falling       bool
 }
 
-func NewPlayer() (*Player, error) {
+func newPlayer() (*player, error) {
 	spriteMapImage, _, err := image.Decode(bytes.NewReader(PlayerSprite))
 	if err != nil {
 		return nil, err
@@ -31,9 +31,9 @@ func NewPlayer() (*Player, error) {
 		return nil, err
 	}
 
-	animation := Animation{spriteMap: spriteMap, maxFrame: 2, debounce: 5}
+	animation := animation{spriteMap: spriteMap, maxFrame: 2, debounce: 5}
 
-	return &Player{
+	return &player{
 		scale:         2,
 		animation:     animation,
 		speed:         1,
@@ -43,15 +43,15 @@ func NewPlayer() (*Player, error) {
 	}, nil
 }
 
-func (p *Player) movementSpeed() float64 {
+func (p player) movementSpeed() float64 {
 	return p.speed * p.speedModifier
 }
 
-func (p *Player) handle(game InputState) {
-	movementKeysPressed := game.rawIndex(ebiten.KeyW) &
-		game.rawIndex(ebiten.KeyS) &
-		game.rawIndex(ebiten.KeyA) &
-		game.rawIndex(ebiten.KeyD)
+func (p *player) handle(is inputState) {
+	movementKeysPressed := is.rawIndex(ebiten.KeyW) &
+		is.rawIndex(ebiten.KeyS) &
+		is.rawIndex(ebiten.KeyA) &
+		is.rawIndex(ebiten.KeyD)
 
 	if movementKeysPressed > -1 {
 		var (
@@ -59,22 +59,22 @@ func (p *Player) handle(game InputState) {
 			horizontalVelocity int
 		)
 
-		if game.rawIndex(ebiten.KeyW) > -1 {
+		if is.rawIndex(ebiten.KeyW) > -1 {
 			p.animation.direction = up
 			p.position.y -= p.movementSpeed()
 			verticalVelocity--
 		}
-		if game.rawIndex(ebiten.KeyS) > -1 {
+		if is.rawIndex(ebiten.KeyS) > -1 {
 			p.animation.direction = down
 			p.position.y += p.movementSpeed()
 			verticalVelocity++
 		}
-		if game.rawIndex(ebiten.KeyA) > -1 {
+		if is.rawIndex(ebiten.KeyA) > -1 {
 			p.animation.direction = down
 			p.position.x -= p.movementSpeed()
 			horizontalVelocity--
 		}
-		if game.rawIndex(ebiten.KeyD) > -1 {
+		if is.rawIndex(ebiten.KeyD) > -1 {
 			p.animation.direction = up
 			p.position.x += p.movementSpeed()
 			horizontalVelocity++
@@ -96,7 +96,7 @@ func (p *Player) handle(game InputState) {
 	}
 }
 
-func (p *Player) draw(screen *ebiten.Image) error {
+func (p *player) draw(screen *ebiten.Image) error {
 	options := &ebiten.DrawImageOptions{}
 	options.GeoM.Scale(p.scale, p.scale)
 	options.GeoM.Translate(p.position.x, p.position.y)
@@ -111,9 +111,9 @@ func (p *Player) draw(screen *ebiten.Image) error {
 	return screen.DrawImage(spriteTile, options)
 }
 
-func (p *Player) physics(world World) error {
+func (p *player) physics(w world) error {
 	var inTile bool
-	for _, t := range world.tiles {
+	for _, t := range w.tiles {
 		playerPosition := p.position
 		playerSize := vertex2{float64(SpriteSize), float64(SpriteSize)}.scaleBy(p.scale)
 		invertedFallBuffer := 2.5
@@ -142,7 +142,7 @@ func (p *Player) physics(world World) error {
 	return nil
 }
 
-func (p Player) String() string {
+func (p player) String() string {
 	return fmt.Sprintf(
 		"position: [%.2f, %.2f]\nmoving: %v\nhealth: %.2f/%.2f %s\nanimation:\n%v\nfalling: %v",
 		p.position.x,

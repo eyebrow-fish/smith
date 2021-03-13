@@ -9,32 +9,12 @@ import (
 const (
 	windowWidth  int = 640
 	windowHeight int = 480
-	gameScale    int = 2
+	windowScale  int = 2
 )
 
 func main() {
-	player, err := smith.NewPlayer()
-	if err != nil {
-		log.Fatalf("failed to load sprite: %v", err)
-	}
-
-	hud, err := smith.NewHud()
-	if err != nil {
-		log.Fatalf("failed to load sprite: %v", err)
-	}
-
-	world, err := smith.NewWorld()
-	if err != nil {
-		log.Fatalf("failed to load world sprite map: %v", err)
-	}
-
-	options := smith.GameOptions{Scale: gameScale}
-	game := &smith.Game{
-		Player:  *player,
-		Hud:     *hud,
-		World:   *world,
-		Options: options,
-	}
+	options := smith.WindowOptions{Scale: windowScale}
+	game := smith.NewGame(options)
 
 	ebiten.SetWindowSize(windowWidth, windowHeight)
 	ebiten.SetWindowTitle("smith")

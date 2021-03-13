@@ -7,12 +7,12 @@ import (
 	"image"
 )
 
-type World struct {
+type world struct {
 	worldMap *ebiten.Image
 	tiles    []tile
 }
 
-func NewWorld() (*World, error) {
+func newWorld() (*world, error) {
 	spriteMapImage, _, err := image.Decode(bytes.NewReader(WorldSprite))
 	if err != nil {
 		return nil, err
@@ -38,10 +38,10 @@ func NewWorld() (*World, error) {
 		)
 	}
 
-	return &World{worldMap: spriteMap, tiles: tiles}, nil
+	return &world{worldMap: spriteMap, tiles: tiles}, nil
 }
 
-func (w *World) draw(screen *ebiten.Image) error {
+func (w *world) draw(screen *ebiten.Image) error {
 	for _, t := range w.tiles {
 		options := &ebiten.DrawImageOptions{}
 		options.GeoM.Translate(t.position.x, t.position.y)

@@ -6,6 +6,7 @@ import (
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/ebitenutil"
 	"image/color"
+	"log"
 )
 
 const (
@@ -27,11 +28,36 @@ var (
 )
 
 type Game struct {
-	InputState
-	Options GameOptions
-	Player  Player
-	Hud     Hud
-	World   World
+	inputState
+	options WindowOptions
+	player  player
+	hud     hud
+	world   world
+}
+
+func NewGame(options WindowOptions) *Game {
+	player, err := newPlayer()
+	if err != nil {
+		log.Fatalf("failed to load sprite: %v", err)
+	}
+
+	hud, err := newHud()
+	if err != nil {
+		log.Fatalf("failed to load sprite: %v", err)
+	}
+
+	world, err := newWorld()
+	if err != nil {
+		log.Fatalf("failed to load world sprite map: %v", err)
+	}
+
+	return &Game{
+		inputState{},
+		options,
+		*player,
+		*hud,
+		*world,
+	}
 }
 
 func (g *Game) Update(screen *ebiten.Image) error {
@@ -39,9 +65,9 @@ func (g *Game) Update(screen *ebiten.Image) error {
 	if g.hasReleased(ebiten.KeyF1) {
 		g.debugMode = !g.debugMode
 	}
-	g.Player.handle(g.InputState)
+	g.player.handle(g.inputState)
 
-	if err := g.Player.physics(g.World); err != nil {
+	if err := g.player.physics(g.world); err != nil {
 		return err
 	}
 
@@ -49,17 +75,21 @@ func (g *Game) Update(screen *ebiten.Image) error {
 		return err
 	}
 
-	if err := g.World.draw(screen); err != nil {
+	if err := g.world.draw(screen); err != nil {
 		return err
 	}
-	if err := g.Player.draw(screen); err != nil {
+	if err := g.player.draw(screen); err != nil {
 		return err
 	}
-	if err := g.Hud.draw(screen, g.Player); err != nil {
+	if err := g.hud.draw(screen, g.player); err != nil {
 		return err
 	}
 
 	return g.handle(screen)
+}
+
+func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
+	return outsideWidth / g.options.Scale, outsideHeight / g.options.Scale
 }
 
 func (g *Game) handle(screen *ebiten.Image) error {
@@ -67,8 +97,8 @@ func (g *Game) handle(screen *ebiten.Image) error {
 		debugText := fmt.Sprintf(
 			"fps: %.f\n%v\n%v",
 			ebiten.CurrentFPS(),
-			g.InputState,
-			g.Player,
+			g.inputState,
+			g.player,
 		)
 		err := ebitenutil.DebugPrint(screen, debugText)
 		if err != nil {
@@ -76,22 +106,18 @@ func (g *Game) handle(screen *ebiten.Image) error {
 		}
 	}
 
-	if g.Player.health <= 0 && g.hasReleased(ebiten.KeySpace) {
-		if player, err := NewPlayer(); err != nil {
+	if g.player.health <= 0 && g.hasReleased(ebiten.KeySpace) {
+		if player, err := newPlayer(); err != nil {
 			return err
 		} else {
-			g.Player = *player
+			g.player = *player
 		}
 	}
 
 	return nil
 }
 
-func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
-	return outsideWidth / g.Options.Scale, outsideHeight / g.Options.Scale
-}
-
-type GameOptions struct {
+type WindowOptions struct {
 	Scale int
 }
 

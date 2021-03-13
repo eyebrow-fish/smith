@@ -6,7 +6,7 @@ import (
 	"image"
 )
 
-type Animation struct {
+type animation struct {
 	spriteMap *ebiten.Image
 	frame     int
 	maxFrame  int
@@ -16,7 +16,7 @@ type Animation struct {
 	paused    bool
 }
 
-func (a *Animation) update() (*ebiten.Image, error) {
+func (a *animation) update() (*ebiten.Image, error) {
 	if a.paused {
 		a.frame = 0
 	} else {
@@ -45,7 +45,7 @@ func (a *Animation) update() (*ebiten.Image, error) {
 	return spriteTile, nil
 }
 
-func (a Animation) String() string {
+func (a animation) String() string {
 	return fmt.Sprintf(
 		"  frame: %d, maxFrame: %d, buffer: %d\n  debounce: %d",
 		a.frame,

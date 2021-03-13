@@ -5,13 +5,13 @@ import (
 	"github.com/hajimehoshi/ebiten"
 )
 
-type InputState struct {
+type inputState struct {
 	debugMode bool
 	raw       []ebiten.Key
 	released  []ebiten.Key
 }
 
-func (i *InputState) rawIndex(key ebiten.Key) int {
+func (i *inputState) rawIndex(key ebiten.Key) int {
 	for i, v := range i.raw {
 		if key == v {
 			return i
@@ -20,7 +20,7 @@ func (i *InputState) rawIndex(key ebiten.Key) int {
 	return -1
 }
 
-func (i *InputState) hasReleased(key ebiten.Key) bool {
+func (i *inputState) hasReleased(key ebiten.Key) bool {
 	for _, v := range i.released {
 		if key == v {
 			return true
@@ -29,7 +29,7 @@ func (i *InputState) hasReleased(key ebiten.Key) bool {
 	return false
 }
 
-func (i *InputState) collectInputs() {
+func (i *inputState) collectInputs() {
 	i.released = []ebiten.Key{}
 	i.collectKeys(
 		ebiten.KeyF1,
@@ -41,7 +41,7 @@ func (i *InputState) collectInputs() {
 	)
 }
 
-func (i *InputState) collectKeys(keys ...ebiten.Key) {
+func (i *inputState) collectKeys(keys ...ebiten.Key) {
 	for _, key := range keys {
 		keyIndex := i.rawIndex(key)
 		if ebiten.IsKeyPressed(key) {
@@ -55,6 +55,6 @@ func (i *InputState) collectKeys(keys ...ebiten.Key) {
 	}
 }
 
-func (i InputState) String() string {
+func (i inputState) String() string {
 	return fmt.Sprintf("raw: %v\nreleased: %v", i.raw, i.released)
 }

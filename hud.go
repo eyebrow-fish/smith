@@ -8,11 +8,11 @@ import (
 	"math"
 )
 
-type Hud struct {
+type hud struct {
 	heartSprite *ebiten.Image
 }
 
-func NewHud() (*Hud, error) {
+func newHud() (*hud, error) {
 	spriteMapImage, _, err := image.Decode(bytes.NewReader(HeartSprite))
 	if err != nil {
 		return nil, err
@@ -23,11 +23,11 @@ func NewHud() (*Hud, error) {
 		return nil, err
 	}
 
-	return &Hud{heartSprite: spriteMap}, nil
+	return &hud{heartSprite: spriteMap}, nil
 }
 
-func (h *Hud) draw(screen *ebiten.Image, player Player) error {
-	if player.health <= 0 {
+func (h *hud) draw(screen *ebiten.Image, p player) error {
+	if p.health <= 0 {
 		x, y := screen.Size()
 		ebitenutil.DebugPrintAt(screen, "x(", x-100, y-80)
 		ebitenutil.DebugPrintAt(screen, "space to retry", x-100, y-60)
@@ -35,14 +35,14 @@ func (h *Hud) draw(screen *ebiten.Image, player Player) error {
 		return nil
 	}
 
-	roundedHealth := math.Round(float64(player.health))
+	roundedHealth := math.Round(float64(p.health))
 	for i := 0; i < int(roundedHealth); i += 2 {
 		_, height := screen.Size()
 
 		options := &ebiten.DrawImageOptions{}
 		options.GeoM.Translate(float64(i/2*10+4), float64(height-14))
 
-		switch player.healthStatus {
+		switch p.healthStatus {
 		case healthy:
 			options.ColorM.Scale(0xff, 0x0, 0x0, 0xff)
 		case poisoned:
