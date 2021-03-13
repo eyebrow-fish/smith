@@ -47,7 +47,7 @@ func (a *animation) update() (*ebiten.Image, error) {
 
 func (a animation) String() string {
 	return fmt.Sprintf(
-		"  frame: %d, maxFrame: %d, buffer: %d\n  debounce: %d",
+		"  frame: %d, maxFrame: %d, buffer: %d\n debounce: %d",
 		a.frame,
 		a.maxFrame,
 		a.buffer,
